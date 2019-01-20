@@ -1,6 +1,7 @@
 package com.category.api.service;
 
 import com.category.api.model.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Enums;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -116,7 +117,11 @@ public class DefaultProductService implements ProductService {
     }
 
     private String getValue(Object value) {
-        return value instanceof String ? (String) value : StringUtils.EMPTY;
+        if(value instanceof String) return (String) value;
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.convertValue(value, PriceValue.class).getFrom();
+        }
     }
 
     private double getDoubleValue(String value) {
